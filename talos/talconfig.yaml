@@ -1,0 +1,94 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+clusterName: kubernetes
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://172.16.20.200:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "172.16.20.200"
+  - "k8s.corp.matjah.dev"
+additionalMachineCertSans: *sans
+
+clusterPodNets: ["10.41.0.0/16"]
+clusterSvcNets: ["10.44.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "k8s-control-01"
+    ipAddress: "172.16.20.201"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:50:56:bb:60:57"
+        dhcp: false
+        addresses:
+          - "172.16.20.201/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "172.16.20.1"
+        mtu: 9000
+        vip:
+          ip: "172.16.20.200"
+  - hostname: "k8s-worker-02"
+    ipAddress: "172.16.20.202"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:50:56:bb:16:62"
+        dhcp: false
+        addresses:
+          - "172.16.20.202/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "172.16.20.1"
+        mtu: 9000
+        vip:
+          ip: "172.16.20.200"
+  - hostname: "k8s-worker-01"
+    ipAddress: "172.16.20.203"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "00:50:56:bb:ca:04"
+        dhcp: false
+        addresses:
+          - "172.16.20.203/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "172.16.20.1"
+        mtu: 9000
+        vip:
+          ip: "172.16.20.200"
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/admission-controller-patch.yaml"
+    - "@./patches/controller/cluster.yaml"
+
