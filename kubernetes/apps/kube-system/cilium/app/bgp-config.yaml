@@ -65,4 +65,4 @@ spec:
   - cidr: "10.41.100.0/24"
   serviceSelector:
     matchLabels:
-      advertise-lb-service: "true"
+      io.kubernetes.service/type: LoadBalancer
