@@ -15,11 +15,31 @@ spec:
     - name: "mikrotik-router"
       peerASN: 64513   # Matches MikroTik configuration
       peerAddress: "172.16.20.1"
-      families:
-      - afi: ipv4
-        safi: unicast
-        advertisements:
-          matchLabels:
+      # families:
+      # - afi: ipv4
+      #   safi: unicast
+      #   advertisements:
+      #     matchLabels:
+      #       advertise-pod-cidr: "true"
+      #       advertise-lb-service: "true"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeer
+metadata:
+  name: mikrotik-router-peer
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      cilium.io/bgp-instance: mikrotik-bgp-instance
+  peerSelector:
+    matchLabels:
+      cilium.io/bgp-peer: mikrotik-router
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        - matchLabels:
             advertise-pod-cidr: "true"
             advertise-lb-service: "true"
 ---
