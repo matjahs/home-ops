@@ -28,6 +28,33 @@ gatewayAPI:
   enabled: true
 hubble:
   enabled: false
+  metrics:
+    enabled:
+      - dns:query;ignoreAAAA
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - http
+      - kafka
+    enableOpenMetrics: true
+    serviceMonitor:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "10.41.0.0/16"
