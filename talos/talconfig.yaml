@@ -25,7 +25,7 @@ nodes:
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -39,12 +39,12 @@ nodes:
         mtu: 9000
         vip:
           ip: "172.16.20.200"
-  - hostname: "k8s-worker-02"
+  - hostname: "k8s-control-02"
     ipAddress: "172.16.20.202"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -58,12 +58,12 @@ nodes:
         mtu: 9000
         vip:
           ip: "172.16.20.200"
-  - hostname: "k8s-worker-01"
+  - hostname: "k8s-control-03"
     ipAddress: "172.16.20.203"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/66cf10e1fbf0f3c2ddb59067ba76d446a3eb07c4bc52c9dc9abc9f7657615571
+    talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -91,4 +91,3 @@ controlPlane:
   patches:
     - "@./patches/controller/admission-controller-patch.yaml"
     - "@./patches/controller/cluster.yaml"
-
