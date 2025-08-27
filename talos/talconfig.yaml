@@ -19,12 +19,21 @@ clusterSvcNets: ["10.44.0.0/16"]
 cniConfig:
   name: none
 
+machine:
+  # bootAssets:  # removed, not supported in Talos v1.10.7
+  #   extensions:
+  #     - image: ghcr.io/siderolabs/extensions:cloudflared
+
 nodes:
   - hostname: "k8s-control-01"
     ipAddress: "172.16.20.201"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
+    machine:
+      # bootAssets:
+      #   extensions:
+      #     - image: ghcr.io/siderolabs/extensions:cloudflared
     talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
@@ -44,6 +53,10 @@ nodes:
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
+    machine:
+      # bootAssets:
+      #   extensions:
+      #     - image: ghcr.io/siderolabs/extensions:cloudflared
     talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
@@ -63,6 +76,10 @@ nodes:
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
+    machine:
+      # bootAssets:
+      #   extensions:
+      #     - image: ghcr.io/siderolabs/extensions:cloudflared
     talosImageURL: factory.talos.dev/vmware-installer/a28d86375cf9debe952efbcbe8e2886cf0a174b1f4dd733512600a40334977d7:v1.10.7
     controlPlane: true
     networkInterfaces:
@@ -90,4 +107,5 @@ patches:
 controlPlane:
   patches:
     - "@./patches/controller/admission-controller-patch.yaml"
+    - "@./patches/controller/cloudflared-patch.yaml"
     - "@./patches/controller/cluster.yaml"
