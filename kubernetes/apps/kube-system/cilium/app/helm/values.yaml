@@ -13,14 +13,6 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-initContainers:
-  cleanCiliumState:
-    securityContext:
-      privileged: true
-      capabilities:
-        add:
-          - CAP_SYS_ADMIN
-          - CAP_NET_ADMIN
 # NOTE: devices might need to be set if you have more than one active NIC on your hosts
 # devices: eno+ eth+
 dashboards:
