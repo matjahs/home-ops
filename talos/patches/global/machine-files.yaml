@@ -7,3 +7,15 @@ machine:
           discard_unpacked_layers = false
         [plugins."io.containerd.cri.v1.runtime"]
           device_ownership_from_security_context = true
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+          SystemdCgroup = true
+          NoNewPrivs    = false
+          capabilities = [
+            "CAP_NET_ADMIN",
+            "CAP_SYS_ADMIN",
+            "CAP_NET_RAW",
+            "CAP_IPC_LOCK",
+            "CAP_SYS_MODULE",
+            "CAP_SYS_NICE",
+            "CAP_SYS_PTRACE"
+          ]
