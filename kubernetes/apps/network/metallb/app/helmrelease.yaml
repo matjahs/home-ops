@@ -5,11 +5,11 @@ metadata:
   name: metallb
   namespace: metallb-system
 spec:
-  interaval: 15m
+  interval: 15m
   chart:
     spec:
       chart: metallb
-      version: "0.14.5"
+      version: "0.15.2"
       sourceRef:
         kind: HelmRepository
         name: metallb
