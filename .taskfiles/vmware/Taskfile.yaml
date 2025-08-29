@@ -1,0 +1,10 @@
+---
+version: '3'
+
+tasks:
+
+  create-vms:
+    desc: Create VMs in vSphere
+    dir: '{{.TALOS_DIR}}'
+    cmds:
+      - govc
