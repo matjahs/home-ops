@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./networks.yaml
-  - ./bgp-config.yaml
+  - ../bgp
 configMapGenerator:
   - name: cilium-values
     files:
