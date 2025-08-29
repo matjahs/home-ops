@@ -1,0 +1,27 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: mikrotik-peering
+spec:
+  nodeSelector: {}
+  virtualRouters:
+    - localASN: 65010
+      neighbors:
+        - peerAddress: 172.16.20.1
+          peerASN: 65000
+          ebgpMultihop: 1
+          holdTimeSeconds: 9
+          keepAliveTimeSeconds: 2
+          connectRetryTimeSeconds: 2
+      addressFamilies:
+        - afi: ipv4
+          safi: unicast
+          redistributions:
+            - from: PodCIDR
+            - from: ServiceLB
+      serviceSelector:
+        matchExpressions:
+          - key: io.kubernetes.service.namespace
+            operator: In
+            values: ["network", "traefik", "kube-system"]
