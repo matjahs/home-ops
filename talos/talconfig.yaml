@@ -9,6 +9,10 @@ endpoint: https://172.16.20.50:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
   - "172.16.20.50"
+  - "172.16.20.70"
+  - "172.16.20.71"
+  - "haproxy01.corp.matjah.dev"
+  - "haproxy02.corp.matjah.dev"
   - "k8s.corp.matjah.dev"
 additionalMachineCertSans: *sans
 

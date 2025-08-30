@@ -2,19 +2,21 @@
   path: /machine/files
   value: []
 - op: add
+  disable: false
   path: /machine/files/-
   value:
     path: /var/etc/ext-cloudflared/credentials.json
     permissions: 384   # 0600
     content: |
-      { "AccountTag":"447525ff1893323291c78fc5672d32be", "TunnelSecret":"lw357q1wCLMWvZ7vEfJOu+7sWgiI1yiHPdUILU9XfkI=", "TunnelID":"f5981849-3fce-4951-a43a-ea15bfa249bd" }
+      { "AccountTag":"${cloudflareAccountTag}", "TunnelSecret":"${cloudflareTunnelSecret}", "TunnelID":"${cloudflareTunnelId}" }
 - op: add
+  disable: false
   path: /machine/files/-
   value:
     path: /var/etc/ext-cloudflared/config.yaml
     permissions: 384   # 0600
     content: |
-      tunnel: f5981849-3fce-4951-a43a-ea15bfa249bd
+      tunnel: ${cloudflareTunnelId}
       credentials-file: /var/etc/ext-cloudflared/credentials.json
       ingress:
         - hostname: grafana.k8s.corp.matjah.dev

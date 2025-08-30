@@ -30,6 +30,9 @@ spec:
         application.namespaces: "*"  # Allow ArgoCD to manage all namespaces
         server.disable.auth: false
         server.insecure: false
+      secret:
+        # Generate with: argocd admin initial-password -n argocd
+        argocdServerAdminPassword: ${SECRET_ARGOCD_ADMIN_PASSWORD}
     server:
       ingress:
         enabled: true
@@ -61,11 +64,6 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-    # Integration with Flux
-    configs:
-      secret:
-        # Generate with: argocd admin initial-password -n argocd
-        argocdServerAdminPassword: ${SECRET_ARGOCD_ADMIN_PASSWORD}
 ---
 # kubernetes/apps/argocd/argocd/app/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -113,4 +111,3 @@ spec:
     syncOptions:
       - CreateNamespace=false
       - ApplyOutOfSyncOnly=true
-

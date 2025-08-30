@@ -1,27 +1,46 @@
 ---
-# BGP Peering Policy for MikroTik
-apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPPeeringPolicy
+# BGP Cluster Configuration using v2 API
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
 metadata:
-  name: mikrotik-peering
+  name: mikrotik-bgp
 spec:
   nodeSelector:
-    matchLabels: {}  # Apply to all nodes
-  virtualRouters:
-  - localASN: 64514
-    exportPodCIDR: true
-    serviceSelector:
+    matchLabels: {}
+  bgpInstances:
+  - name: "main"
+    localASN: 64514
+    peers:
+    - name: "mikrotik"
+      peerASN: 64513
+      peerAddress: "172.16.20.1"
+---
+# BGP Advertisement for Pod CIDRs
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: pod-advertisement
+spec:
+  advertisements:
+  - advertisementType: "PodCIDR"
+---
+# BGP Advertisement for LoadBalancer Services
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: service-advertisement
+spec:
+  advertisements:
+  - advertisementType: "Service"
+    service:
+      addresses:
+      - LoadBalancerIP
+    selector:
       matchExpressions:
       - key: io.kubernetes.service.type
         operator: In
         values:
         - LoadBalancer
-    neighbors:
-    - peerASN: 64513
-      peerAddress: "172.16.20.1"
-      connectRetryTime: "30s"
-      holdTime: "90s"
-      keepAliveTime: "30s"
 ---
 # LoadBalancer IP Pool
 apiVersion: cilium.io/v2alpha1
@@ -29,31 +48,18 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: primary-pool
 spec:
+  allowFirstLastIPs: "Yes"
   blocks:
-  - cidr: "172.16.20.220/30"  # .220-.223
-  serviceSelector:
-    matchExpressions:
-    - key: io.kubernetes.service.type
-      operator: In
-      values:
-      - LoadBalancer
+  - cidr: "172.16.20.220/30"
 ---
-# L2 Announcement Policy (replaces MetalLB)
+# L2 Announcement Policy
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
   name: default-l2-policy
 spec:
-  serviceSelector:
-    matchExpressions:
-    - key: io.kubernetes.service.type
-      operator: In
-      values:
-      - LoadBalancer
-  nodeSelector:
-    matchLabels: {}  # All nodes can announce
-  interfaces:
-  - ^eth[0-9]+
-  - ^ens[0-9]+
-  externalIPs: true
   loadBalancerIPs: true
+  externalIPs: true
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
