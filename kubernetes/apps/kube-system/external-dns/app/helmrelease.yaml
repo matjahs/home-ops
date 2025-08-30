@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: external-dns
-      version: "1.15.x"   # pick a stable version from the repo
+      version: "1.18.x"   # pick a stable version from the repo
       sourceRef:
         kind: HelmRepository
         name: external-dns
