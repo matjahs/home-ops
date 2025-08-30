@@ -1,5 +1,5 @@
 ---
-# Primary LoadBalancer IP Pool (replaces MetalLB)
+# Primary LoadBalancer IP Pool (BGP advertised only)
 apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
@@ -14,19 +14,3 @@ spec:
       operator: In
       values:
       - LoadBalancer
----
-# L2 Announcement Policy (replaces MetalLB L2Advertisement)
-apiVersion: cilium.io/v2
-kind: CiliumL2AnnouncementPolicy
-metadata:
-  name: default-l2-policy
-spec:
-  loadBalancerIPs: true
-  externalIPs: true
-  # Interfaces will be auto-detected, but you can specify if needed:
-  # interfaces:
-  #   - ^eth[0-9]+
-  #   - ^ens[0-9]+
-  nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux

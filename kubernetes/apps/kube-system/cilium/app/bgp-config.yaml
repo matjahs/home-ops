@@ -41,25 +41,3 @@ spec:
         operator: In
         values:
         - LoadBalancer
----
-# LoadBalancer IP Pool
-apiVersion: cilium.io/v2alpha1
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: primary-pool
-spec:
-  allowFirstLastIPs: "Yes"
-  blocks:
-  - cidr: "172.16.20.220/30"
----
-# L2 Announcement Policy
-apiVersion: cilium.io/v2alpha1
-kind: CiliumL2AnnouncementPolicy
-metadata:
-  name: default-l2-policy
-spec:
-  loadBalancerIPs: true
-  externalIPs: true
-  nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux
