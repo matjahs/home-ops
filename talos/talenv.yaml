@@ -2,3 +2,8 @@
 talosVersion: v1.10.7
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.33.4
+
+# Cloudflare tunnel credentials (loaded from talsecret.sops.yaml)
+cloudflareAccountTag: ${cloudflare.accountTag}
+cloudflareTunnelSecret: ${cloudflare.tunnelSecret}
+cloudflareTunnelId: ${cloudflare.tunnelId}

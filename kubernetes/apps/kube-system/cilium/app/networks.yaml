@@ -1,6 +1,6 @@
 ---
 # Primary LoadBalancer IP Pool (replaces MetalLB)
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: primary-pool
@@ -16,7 +16,7 @@ spec:
       - LoadBalancer
 ---
 # L2 Announcement Policy (replaces MetalLB L2Advertisement)
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumL2AnnouncementPolicy
 metadata:
   name: default-l2-policy
