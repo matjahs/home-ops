@@ -35,16 +35,10 @@ spec:
         argocdServerAdminPassword: ${SECRET_ARGOCD_ADMIN_PASSWORD}
     server:
       ingress:
-        enabled: true
-        ingressClassName: cilium
-        hosts:
-          - argocd.${SECRET_DOMAIN}
-        tls:
-          - secretName: ${SECRET_DOMAIN/./-}-production-tls
-            hosts:
-              - argocd.${SECRET_DOMAIN}
+        enabled: false  # We'll use our custom ingress instead
       extraArgs:
-        - --insecure  # Behind Gateway with TLS termination
+        - --insecure  # Behind Traefik with TLS termination
+        - --grpc-web  # Enable grpc-web for better web client support
     # Disable ArgoCD's sync to avoid conflicts with Flux
     controller:
       args:
@@ -64,50 +58,3 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
----
-# kubernetes/apps/argocd/argocd/app/kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - ./helmrelease.yaml
-  - ./flamingo-apps.yaml
----
-# kubernetes/apps/argocd/argocd/app/flamingo-apps.yaml
-# This creates ArgoCD Applications that mirror your Flux resources for visualization
-apiVersion: argoproj.io/v1alpha1
-kind: AppProject
-metadata:
-  name: flamingo
-  namespace: argocd
-spec:
-  description: Flamingo - Flux visualization via ArgoCD
-  sourceRepos:
-    - 'https://github.com/matjahs/home-ops.git'
-  destinations:
-    - namespace: '*'
-      server: 'https://kubernetes.default.svc'
-  clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: flux-system
-  namespace: argocd
-spec:
-  project: flamingo
-  source:
-    repoURL: https://github.com/matjahs/home-ops.git
-    targetRevision: main
-    path: kubernetes/flux
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: flux-system
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
-    syncOptions:
-      - CreateNamespace=false
-      - ApplyOutOfSyncOnly=true

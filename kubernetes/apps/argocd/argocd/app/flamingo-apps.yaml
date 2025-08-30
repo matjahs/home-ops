@@ -1,0 +1,39 @@
+---
+# This creates ArgoCD Applications that mirror your Flux resources for visualization
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: flamingo
+  namespace: argocd
+spec:
+  description: Flamingo - Flux visualization via ArgoCD
+  sourceRepos:
+    - 'https://github.com/matjahs/home-ops.git'
+  destinations:
+    - namespace: '*'
+      server: 'https://kubernetes.default.svc'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flux-system
+  namespace: argocd
+spec:
+  project: flamingo
+  source:
+    repoURL: https://github.com/matjahs/home-ops.git
+    targetRevision: main
+    path: kubernetes/flux
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: flux-system
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=false
+      - ApplyOutOfSyncOnly=true
