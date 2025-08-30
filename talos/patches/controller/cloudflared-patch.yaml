@@ -1,0 +1,24 @@
+- op: add
+  path: /machine/files
+  value: []
+- op: add
+  disable: false
+  path: /machine/files/-
+  value:
+    path: /var/etc/ext-cloudflared/credentials.json
+    permissions: 384   # 0600
+    content: |
+      { "AccountTag":"${cloudflareAccountTag}", "TunnelSecret":"${cloudflareTunnelSecret}", "TunnelID":"${cloudflareTunnelId}" }
+- op: add
+  disable: false
+  path: /machine/files/-
+  value:
+    path: /var/etc/ext-cloudflared/config.yaml
+    permissions: 384   # 0600
+    content: |
+      tunnel: ${cloudflareTunnelId}
+      credentials-file: /var/etc/ext-cloudflared/credentials.json
+      ingress:
+        - hostname: grafana.k8s.corp.matjah.dev
+          service: http://10.96.0.10:3000
+        - service: http_status:404
