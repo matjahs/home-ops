@@ -5,6 +5,8 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
+allowSchedulingOnMasters: true
+
 endpoint: https://172.16.20.50:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
@@ -22,6 +24,8 @@ clusterSvcNets: ["10.44.0.0/16"]
 # Disable built-in CNI to use Cilium
 cniConfig:
   name: none
+
+domain: ${domain}
 
 nodes:
   - hostname: "k8s-control-01"

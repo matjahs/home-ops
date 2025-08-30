@@ -1,0 +1,7 @@
+---
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/iscsi-tools
+      - siderolabs/vmtoolsd-guest-agent
+      - siderolabs/util-linux-tools

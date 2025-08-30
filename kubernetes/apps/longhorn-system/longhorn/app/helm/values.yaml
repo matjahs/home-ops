@@ -1,0 +1,13 @@
+---
+defaultSettings:
+  defaultReplicaCount: 1
+  backupTarget: "s3://k8s-backup@eu-west-1/"
+  backupTargetCredentialSecret: "minio-credentials"
+persistence:
+  reclaimPolicy: Delete
+  defaultReplicaCount: 1
+  defaultClass: true
+service:
+  ui:
+    type: LoadBalancer
+    port: 80
