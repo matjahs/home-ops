@@ -8,11 +8,19 @@ spec:
   chart:
     spec:
       chart: external-dns
-      version: "1.15.x"   # pick a stable version from the repo
+      version: 1.18.0   # pick a stable version from the repo
       sourceRef:
         kind: HelmRepository
         name: external-dns
         namespace: flux-system
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
     # Run external-dns as a Deployment in kube-system
     serviceAccount:
