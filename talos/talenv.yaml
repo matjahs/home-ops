@@ -1,7 +1,7 @@
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
 talosVersion: v1.10.7
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.33.4
+kubernetesVersion: v1.35.2
 
 domain: corp.matjah.dev
 
